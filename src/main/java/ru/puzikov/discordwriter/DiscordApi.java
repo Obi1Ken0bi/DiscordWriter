@@ -25,7 +25,7 @@ public class DiscordApi {
     @Bean
     static String getToken() {
         System.out.println("Token ready");
-        return "OTM4ODE3MzI2MzUzMDk2NzE1.YfvzxA.M2nRBTPdvHa3Y3rHTwulQEVetK8";
+        return "token";
     }
 
     public void send(String text) {
