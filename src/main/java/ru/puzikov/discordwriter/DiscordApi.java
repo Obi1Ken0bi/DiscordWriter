@@ -1,32 +1,32 @@
 package ru.puzikov.discordwriter;
 
 
-import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-@Configuration
+import javax.security.auth.login.LoginException;
+
+@Component
+@Slf4j
 public class DiscordApi {
-    private final String token;
+
     private final JDA api;
 
-    @SneakyThrows
-    public DiscordApi(@Autowired String token) {
-        this.token = token;
-        api = JDABuilder.createDefault(token).build();
+    public DiscordApi(@Value("${discord.token}") String token) {
+        try {
+            log.info(token);
+            api = JDABuilder.createDefault(token).setToken(token).build();
+        } catch (LoginException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
-    @Bean
-    static String getToken() {
-        System.out.println("Token ready");
-        return "token";
-    }
 
     public void send(String text) {
         Guild guild = api.getGuildById("261125968628809729");
